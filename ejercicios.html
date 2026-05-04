@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ejercicios — Zénit</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <a href="index.html" style="display:flex;align-items:center;gap:8px;">ZÉN<span>IT</span><div class="dot"></div></a>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="index.html" onclick="requireLogin('dashboard'); return false;">Mi progreso</a></li>
+    <li><a href="asesores.html">Asesores</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn btn-secondary btn-sm" onclick="history.back()">← Volver</button>
+  </div>
+</nav>
+
+<div class="page active" id="page-exercise">
+  <div class="exercise-container">
+
+    <!-- Exercise header bar -->
+    <div class="exercise-header">
+      <div class="exercise-breadcrumb">
+        <span onclick="history.back()">Dashboard</span>
+        <span style="color:var(--text-dim)">›</span>
+        <span id="ex-subject-label">Materia</span>
+      </div>
+      <div class="ex-progress-bar">
+        <div class="ex-progress-fill" id="ex-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="ex-counter" id="ex-counter">1 / 5</div>
+    </div>
+
+    <!-- Exercise card -->
+    <div id="exercise-area"></div>
+
+    <!-- Results -->
+    <div id="results-area" style="display:none;">
+      <div class="exercise-card results-screen">
+        <div class="results-emoji" id="res-emoji">🎉</div>
+        <div class="results-title" id="res-title">¡Excelente trabajo!</div>
+        <div class="results-subtitle" id="res-sub">Completaste la lección</div>
+        <div class="results-score" id="res-score">5<small>/5</small></div>
+        <div class="results-xp" id="res-xp">⭐ +50 XP ganados</div>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1rem;">
+          <button class="btn btn-secondary btn-lg" onclick="window.location.href='index.html'">← Volver al inicio</button>
+          <button class="btn btn-primary btn-lg" onclick="restartExercise()">Repetir ↺</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toastIcon">✅</div>
+  <div class="toast-text">
+    <div class="title" id="toastTitle"></div>
+    <div class="sub" id="toastSub"></div>
+  </div>
+</div>
+
+<script src="exercises.js"></script>
+</body>
+</html>
