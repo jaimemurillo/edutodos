@@ -1,510 +1,1323 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zénit — Aprende Sin Límites</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Edutodos — Educación para todos</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange:   #FF7043;
+  --orange-l: #FFF3EE;
+  --orange-m: #FFCCBC;
+  --green:    #2E7D32;
+  --green-l:  #E8F5E9;
+  --green-m:  #A5D6A7;
+  --blue:     #1565C0;
+  --blue-l:   #E3F2FD;
+  --blue-m:   #90CAF9;
+  --purple:   #6A1B9A;
+  --purple-l: #F3E5F5;
+  --purple-m: #CE93D8;
+  --amber:    #E65100;
+  --amber-l:  #FFF8E1;
+  --amber-m:  #FFE082;
+  --bg:       #FFFDF9;
+  --bg2:      #F5F0E8;
+  --bg3:      #EDE8DC;
+  --text:     #1A1208;
+  --text2:    #5C4A2A;
+  --text3:    #9E8A6A;
+  --border:   #E0D5C0;
+  --radius:   16px;
+  --radius-sm:10px;
+  --shadow:   0 2px 12px rgba(0,0,0,.06);
+  --shadow-md:0 4px 24px rgba(0,0,0,.10);
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,253,249,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid var(--border);
+  display: flex; align-items: center; gap: 1.5rem;
+  padding: .75rem 2rem;
+}
+.nav-logo {
+  font-family: 'Lora', serif;
+  font-size: 1.25rem; font-weight: 700;
+  color: var(--orange); letter-spacing: -0.5px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  flex-shrink: 0;
+}
+.nav-logo .tagline {
+  font-family: 'Nunito', sans-serif;
+  font-size: .68rem; font-weight: 600;
+  color: var(--text3); letter-spacing: .5px;
+  text-transform: uppercase;
+  display: block; line-height: 1;
+}
+.nav-links { list-style: none; display: flex; gap: .25rem; flex: 1; }
+.nav-links a {
+  text-decoration: none; color: var(--text2);
+  font-weight: 600; font-size: .88rem;
+  padding: .4rem .85rem; border-radius: 20px;
+  transition: background .15s, color .15s;
+}
+.nav-links a:hover, .nav-links a.active {
+  background: var(--orange-l); color: var(--orange);
+}
+.nav-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--orange); color: #fff;
+  font-weight: 800; font-size: .95rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; cursor: pointer;
+}
+.nav-user { font-weight: 700; font-size: .88rem; color: var(--text2); }
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── HOME ── */
+.hero {
+  background: linear-gradient(135deg, #FFF8F4 0%, #FFF3E0 50%, #F3E5F5 100%);
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 20% 80%, #FFE0B230 0%, transparent 70%),
+              radial-gradient(ellipse 50% 50% at 80% 20%, #E1BEE730 0%, transparent 70%);
+}
+.hero-content { position: relative; max-width: 700px; margin: 0 auto; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--orange-l); color: var(--orange);
+  font-weight: 800; font-size: .78rem; letter-spacing: .5px;
+  text-transform: uppercase;
+  padding: .35rem .9rem; border-radius: 20px;
+  border: 1.5px solid var(--orange-m);
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700; line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.hero h1 em { font-style: normal; color: var(--orange); }
+.hero p {
+  font-size: 1.05rem; color: var(--text2);
+  max-width: 520px; margin: 0 auto 2rem;
+}
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.stats-row {
+  display: flex; gap: 2rem; justify-content: center;
+  margin-top: 3rem; flex-wrap: wrap;
+}
+.stat-item { text-align: center; }
+.stat-item .num {
+  font-family: 'Lora', serif;
+  font-size: 1.8rem; font-weight: 700; color: var(--orange);
+}
+.stat-item .lbl { font-size: .8rem; color: var(--text3); font-weight: 600; }
+
+/* Subjects grid */
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+.subject-card {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.5rem;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  text-align: center;
+}
+.subject-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.subject-card.math:hover  { border-color: #1565C0; }
+.subject-card.eng:hover   { border-color: #2E7D32; }
+.subject-card.esp:hover   { border-color: #6A1B9A; }
+.subject-icon {
+  font-size: 2.5rem; margin-bottom: .75rem; display: block;
+}
+.subject-card h3 { font-weight: 800; font-size: 1.05rem; margin-bottom: .35rem; }
+.subject-card p  { font-size: .83rem; color: var(--text3); }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700; font-size: .9rem;
+  padding: .65rem 1.4rem;
+  border-radius: 40px;
+  transition: transform .15s, opacity .15s, box-shadow .15s;
+  text-decoration: none;
+}
+.btn:active { transform: scale(.97); }
+.btn-primary {
+  background: var(--orange); color: #fff;
+  box-shadow: 0 4px 14px #FF704340;
+}
+.btn-primary:hover { box-shadow: 0 6px 20px #FF704360; }
+.btn-secondary {
+  background: var(--bg2); color: var(--text);
+  border: 2px solid var(--border);
+}
+.btn-secondary:hover { background: var(--bg3); }
+.btn-green { background: var(--green); color: #fff; box-shadow: 0 4px 14px #2E7D3240; }
+.btn-blue  { background: var(--blue); color: #fff; }
+.btn-sm { padding: .45rem 1rem; font-size: .82rem; }
+.btn-lg { padding: .8rem 1.8rem; font-size: 1rem; }
+
+/* ── SECTION ── */
+.section { padding: 4rem 2rem; }
+.container { max-width: 960px; margin: 0 auto; }
+.section-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .75rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--orange);
+  background: var(--orange-l);
+  padding: .3rem .8rem; border-radius: 20px;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Lora', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 700; line-height: 1.25;
+  margin-bottom: 1rem; color: var(--text);
+}
+.section-sub {
+  font-size: 1rem; color: var(--text2);
+  max-width: 540px; margin-bottom: 2.5rem;
+}
+
+/* ── DASHBOARD ── */
+.dash-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2rem; align-items: start;
+  max-width: 1100px; margin: 0 auto;
+  padding: 2rem;
+}
+@media(max-width:700px) {
+  .dash-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+}
+.sidebar {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem 1rem;
+  position: sticky; top: 80px;
+}
+.sidebar-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), #FF8A65);
+  color: #fff; font-size: 1.4rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1rem;
+}
+.sidebar-name { text-align: center; font-weight: 800; font-size: 1rem; }
+.sidebar-sub  { text-align: center; font-size: .78rem; color: var(--text3); margin-bottom: 1.25rem; }
+.xp-bar {
+  background: var(--bg2); border-radius: 20px;
+  height: 8px; margin-bottom: .4rem; overflow: hidden;
+}
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), #FF8A65);
+  border-radius: 20px; transition: width .6s ease;
+}
+.xp-label { font-size: .75rem; color: var(--text3); text-align: center; margin-bottom: 1.25rem; }
+.sidebar-divider { border: none; border-top: 1.5px solid var(--border); margin: 1rem 0; }
+.sidebar-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: .6rem .85rem; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: .87rem;
+  color: var(--text2); cursor: pointer;
+  transition: background .15s, color .15s;
+  border: none; background: none; width: 100%;
+  text-align: left;
+}
+.sidebar-link:hover { background: var(--orange-l); color: var(--orange); }
+.sidebar-link.active { background: var(--orange-l); color: var(--orange); }
+.sidebar-link .icon { font-size: 1rem; }
+
+/* Dash main */
+.dash-greeting {
+  font-family: 'Lora', serif;
+  font-size: 1.5rem; font-weight: 700; margin-bottom: .25rem;
+}
+.dash-streak-bar {
+  display: flex; align-items: center; gap: .75rem;
+  background: var(--amber-l);
+  border: 2px solid var(--amber-m);
+  border-radius: var(--radius-sm);
+  padding: .75rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700; font-size: .9rem; color: var(--amber);
+}
+.stat-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; margin-bottom: 2rem;
+}
+.stat-card {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 1.25rem;
+  text-align: center;
+}
+.stat-card .sc-num {
+  font-family: 'Lora', serif;
+  font-size: 1.8rem; font-weight: 700;
+}
+.stat-card .sc-lbl { font-size: .78rem; color: var(--text3); font-weight: 600; }
+
+/* Lessons */
+.lessons-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+  gap: 1rem;
+}
+.lesson-card {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 1.25rem;
+  cursor: pointer; transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.lesson-card:hover:not(.locked) { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.lesson-card.locked { opacity: .55; cursor: not-allowed; }
+.lc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .75rem; }
+.lc-badge {
+  font-size: .7rem; font-weight: 800; text-transform: uppercase;
+  padding: .25rem .6rem; border-radius: 20px;
+}
+.lc-badge.done   { background: var(--green-l); color: var(--green); }
+.lc-badge.new    { background: var(--blue-l); color: var(--blue); }
+.lc-badge.review { background: var(--amber-l); color: var(--amber); }
+.lc-badge.locked { background: var(--bg2); color: var(--text3); }
+.lc-icon { font-size: 1.5rem; }
+.lc-title { font-weight: 800; font-size: .95rem; margin-bottom: .3rem; }
+.lc-desc  { font-size: .8rem; color: var(--text3); margin-bottom: .75rem; }
+.lc-meta  { display: flex; justify-content: space-between; font-size: .78rem; font-weight: 700; }
+.lc-time  { color: var(--text3); }
+.lc-xp    { color: var(--orange); }
+
+/* ── EXERCISES ── */
+.exercise-shell {
+  max-width: 680px; margin: 0 auto; padding: 2rem;
+}
+.exercise-header {
+  display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
+}
+.ex-progress-bar {
+  flex: 1; height: 10px;
+  background: var(--bg2); border-radius: 20px; overflow: hidden;
+}
+.ex-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), #FF8A65);
+  border-radius: 20px; transition: width .4s ease;
+}
+.ex-counter { font-weight: 800; font-size: .85rem; color: var(--text3); white-space: nowrap; }
+.exercise-card {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 2rem;
+  box-shadow: var(--shadow);
+  animation: slideIn .3s ease;
+}
+@keyframes slideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.ex-q-num { font-size: .78rem; font-weight: 800; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: .5rem; }
+.ex-question { font-family: 'Lora', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.4; }
+.ex-options { display: flex; flex-direction: column; gap: .75rem; }
+.ex-option {
+  background: var(--bg); border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: .9rem 1.25rem;
+  cursor: pointer; font-weight: 600; font-size: .9rem;
+  transition: border-color .15s, background .15s;
+  text-align: left;
+}
+.ex-option:hover:not(:disabled)  { border-color: var(--orange); background: var(--orange-l); }
+.ex-option.correct { background: var(--green-l); border-color: var(--green); color: var(--green); }
+.ex-option.wrong   { background: #FFEBEE; border-color: #EF9A9A; color: #C62828; }
+.ex-option:disabled { cursor: default; }
+.ex-fill-input {
+  width: 100%; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: .85rem 1.25rem;
+  font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600;
+  background: var(--bg); color: var(--text);
+  margin-bottom: 1rem;
+}
+.ex-fill-input:focus { outline: none; border-color: var(--orange); }
+.ex-next-btn { width: 100%; margin-top: 1.25rem; }
+.ex-feedback {
+  margin-top: 1rem; padding: .9rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700; font-size: .9rem;
+}
+.ex-feedback.ok  { background: var(--green-l); color: var(--green); }
+.ex-feedback.err { background: #FFEBEE; color: #C62828; }
+
+/* Results */
+.results-screen { text-align: center; padding: 3rem 2rem; }
+.results-emoji { font-size: 4rem; margin-bottom: 1rem; }
+.results-title {
+  font-family: 'Lora', serif; font-size: 1.8rem; font-weight: 700;
+  margin-bottom: .5rem;
+}
+.results-sub { color: var(--text3); margin-bottom: 1.5rem; }
+.results-score {
+  font-family: 'Lora', serif; font-size: 3.5rem; font-weight: 700;
+  color: var(--orange); line-height: 1;
+}
+.results-score small { font-size: 1.2rem; color: var(--text3); }
+.results-xp {
+  font-weight: 800; font-size: 1.1rem; color: var(--green);
+  margin: .75rem 0 2rem;
+}
+
+/* ── ASESORES ── */
+.advisors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.advisor-card {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  transition: transform .2s, box-shadow .2s;
+}
+.advisor-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.adv-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; font-weight: 900; color: #fff;
+  margin-bottom: 1rem;
+}
+.adv-name  { font-weight: 800; font-size: 1rem; margin-bottom: .2rem; }
+.adv-role  { font-size: .8rem; color: var(--text3); margin-bottom: .75rem; }
+.adv-tags  { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.adv-tag {
+  font-size: .72rem; font-weight: 700; padding: .25rem .7rem;
+  border-radius: 20px;
+}
+.tag-math   { background: var(--blue-l); color: var(--blue); }
+.tag-eng    { background: var(--green-l); color: var(--green); }
+.tag-esp    { background: var(--purple-l); color: var(--purple); }
+.adv-rating { font-size: .82rem; font-weight: 700; color: var(--amber); }
+.adv-sessions { font-size: .78rem; color: var(--text3); }
+
+/* Filter tabs */
+.filter-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.filter-tab {
+  padding: .45rem 1.1rem; border-radius: 20px;
+  border: 2px solid var(--border);
+  background: #fff; font-weight: 700; font-size: .83rem;
+  cursor: pointer; transition: all .15s; font-family: 'Nunito', sans-serif;
+}
+.filter-tab.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+/* Request form */
+.form-card {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 2rem;
+  max-width: 540px; margin: 0 auto;
+  box-shadow: var(--shadow);
+}
+.form-group { margin-bottom: 1.25rem; }
+.form-label { display: block; font-weight: 700; font-size: .85rem; margin-bottom: .45rem; color: var(--text); }
+.form-input, .form-select, .form-textarea {
+  width: 100%; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: .7rem 1rem;
+  font-family: 'Nunito', sans-serif; font-size: .9rem;
+  background: var(--bg); color: var(--text);
+  transition: border-color .15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none; border-color: var(--orange);
+}
+.form-textarea { min-height: 100px; resize: vertical; }
+
+/* ── LEADERBOARD ── */
+.podium {
+  display: flex; justify-content: center; align-items: flex-end;
+  gap: 1rem; margin-bottom: 2.5rem;
+}
+.podium-item { text-align: center; flex: 1; max-width: 160px; }
+.podium-bar {
+  border-radius: 12px 12px 0 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding: 1rem .75rem .75rem;
+  margin-bottom: 0;
+}
+.podium-item:nth-child(2) .podium-bar { height: 140px; background: linear-gradient(180deg, #FFD700, #FFB300); }
+.podium-item:nth-child(1) .podium-bar { height: 100px; background: linear-gradient(180deg, #9E9E9E, #757575); }
+.podium-item:nth-child(3) .podium-bar { height: 80px;  background: linear-gradient(180deg, #CD7F32, #A0522D); }
+.podium-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 1.1rem; color: #fff;
+  margin-bottom: .5rem;
+}
+.podium-name { font-weight: 700; font-size: .82rem; color: #fff; }
+.podium-xp   { font-size: .72rem; color: rgba(255,255,255,.8); }
+.podium-rank { font-size: 1.5rem; margin-top: .5rem; }
+.lb-row {
+  display: flex; align-items: center; gap: 1rem;
+  padding: .85rem 1.25rem;
+  border-radius: var(--radius-sm);
+  border-bottom: 1.5px solid var(--border);
+  transition: background .15s;
+}
+.lb-row:hover { background: var(--orange-l); }
+.lb-row.me    { background: var(--orange-l); font-weight: 800; }
+.lb-rank { font-weight: 900; width: 24px; text-align: center; font-size: .85rem; color: var(--text3); }
+.lb-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: .9rem; color: #fff;
+}
+.lb-name { flex: 1; font-weight: 700; font-size: .9rem; }
+.lb-xp   { font-weight: 800; font-size: .88rem; color: var(--orange); }
+.lb-badge{ font-size: 1rem; }
+
+/* ── ACHIEVEMENTS ── */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.ach-card {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 1.25rem;
+  text-align: center;
+}
+.ach-card.locked { opacity: .45; filter: grayscale(.8); }
+.ach-icon { font-size: 2.2rem; margin-bottom: .5rem; }
+.ach-name { font-weight: 800; font-size: .88rem; }
+.ach-desc { font-size: .75rem; color: var(--text3); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
+  background: var(--text); color: #fff;
+  border-radius: var(--radius); padding: 1rem 1.4rem;
+  display: flex; align-items: center; gap: .75rem;
+  box-shadow: var(--shadow-md);
+  transform: translateY(120%); opacity: 0;
+  transition: transform .3s ease, opacity .3s ease;
+  max-width: 320px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-icon { font-size: 1.3rem; }
+.toast-title { font-weight: 800; font-size: .9rem; }
+.toast-sub   { font-size: .78rem; opacity: .7; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(26,18,8,.55);
+  display: none; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff; border-radius: var(--radius);
+  padding: 2rem; width: 100%; max-width: 440px;
+  position: relative; box-shadow: var(--shadow-md);
+}
+.modal-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--bg2); border: none; border-radius: 50%;
+  width: 32px; height: 32px; cursor: pointer;
+  font-size: 1rem; display: flex; align-items: center; justify-content: center;
+  color: var(--text2);
+}
+.modal-title { font-family: 'Lora', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .25rem; }
+.modal-sub   { font-size: .88rem; color: var(--text3); margin-bottom: 1.5rem; }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--bg2); border-top: 2px solid var(--border);
+  padding: 2rem; text-align: center;
+  font-size: .82rem; color: var(--text3); font-weight: 600;
+}
+
+/* ── TABS (dash) ── */
+.dash-tabs {
+  display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border); padding-bottom: .75rem;
+}
+.dash-tab {
+  padding: .45rem 1.1rem; border-radius: 20px 20px 0 0;
+  border: none; background: none;
+  font-weight: 700; font-size: .85rem;
+  cursor: pointer; color: var(--text3);
+  font-family: 'Nunito', sans-serif;
+  transition: color .15s, background .15s;
+}
+.dash-tab.active { color: var(--orange); background: var(--orange-l); }
+.dash-tab:hover  { color: var(--orange); }
+
+/* ── BACK LINK ── */
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-weight: 700; font-size: .85rem; color: var(--text2);
+  cursor: pointer; margin-bottom: 1.5rem;
+  padding: .45rem .9rem; border-radius: 20px;
+  transition: background .15s;
+}
+.back-link:hover { background: var(--bg2); }
+
+/* ── ADV HERO ── */
+.adv-hero {
+  background: linear-gradient(135deg, #E8F5E9, #F3E5F5);
+  border-radius: var(--radius); padding: 2.5rem;
+  text-align: center; margin-bottom: 2.5rem;
+}
+</style>
 </head>
 <body>
 
-<!-- ═══════════════ NAV ═══════════════ -->
+<!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">
-    ZÉN<span>IT</span><div class="dot"></div>
+  <div class="nav-logo" onclick="showPage('home')">
+    <div>
+      <span>edu<strong>todos</strong></span>
+      <span class="tagline">Educación para todos</span>
+    </div>
   </div>
   <ul class="nav-links">
-    <li><a href="index.html" class="active" onclick="showPage('home'); return false;">Inicio</a></li>
-    <li><a href="#" onclick="requireLogin('dashboard'); return false;">Mi progreso</a></li>
-    <li><a href="asesores.html">Asesores</a></li>
-    <li><a href="#" onclick="requireLogin('leaderboard'); return false;">Ranking</a></li>
+    <li><a href="#" onclick="showPage('home'); return false;" id="nav-home" class="active">Inicio</a></li>
+    <li><a href="#" onclick="showPage('dashboard'); return false;" id="nav-dash">Mi progreso</a></li>
+    <li><a href="#" onclick="showPage('asesores'); return false;" id="nav-adv">Asesores</a></li>
+    <li><a href="#" onclick="showPage('ranking'); return false;" id="nav-rank">Ranking</a></li>
   </ul>
-  <div class="nav-actions">
-    <button class="btn btn-ghost" onclick="openModal('login')">Entrar</button>
-    <button class="btn btn-primary" onclick="openModal('register')">Únete gratis</button>
+  <div style="display:flex;align-items:center;gap:.6rem;margin-left:auto;">
+    <div class="nav-user">Pepito</div>
+    <div class="nav-avatar" onclick="showPage('dashboard')">P</div>
   </div>
-  <button class="hamburger" onclick="toggleMobileNav()" aria-label="Menú">
-    <span></span><span></span><span></span>
-  </button>
 </nav>
 
-<!-- Mobile nav -->
-<div class="mobile-nav" id="mobileNav">
-  <a href="#" onclick="showPage('home'); toggleMobileNav(); return false;">🏠 Inicio</a>
-  <a href="#" onclick="requireLogin('dashboard'); toggleMobileNav(); return false;">📊 Mi progreso</a>
-  <a href="asesores.html">👩‍🏫 Asesores</a>
-  <a href="#" onclick="requireLogin('leaderboard'); toggleMobileNav(); return false;">🏆 Ranking</a>
-  <a href="#" onclick="openModal('login'); toggleMobileNav(); return false;" style="color:var(--cyan);">Entrar</a>
-</div>
-
-<!-- ═══════════════ PAGES ═══════════════ -->
-
-<!-- ── HOME ── -->
+<!-- ───────────── HOME ───────────── -->
 <div class="page active" id="page-home">
-
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-orbs">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-    </div>
-    <div class="container">
-      <div class="hero-inner">
-        <div class="hero-content fade-up">
-          <div class="hero-tag">Plataforma gratuita para estudiantes</div>
-          <h1 class="hero-title">
-            Aprende más<br>
-            rápido. Sube de<br>
-            <span class="accent-cyan">nivel</span>
-            <span class="accent-yellow"> ✦</span>
-          </h1>
-          <p class="hero-subtitle">
-            Matemáticas, Inglés y Español — adaptados a tu ritmo.
-            Gana XP, sube en el ranking y conecta con asesores que te apoyan de verdad.
-          </p>
-          <div class="hero-cta">
-            <button class="btn btn-primary btn-lg" onclick="openModal('register')">
-              ⚡ Empieza ahora — es gratis
-            </button>
-            <button class="btn btn-secondary btn-lg" onclick="scrollToSubjects()">
-              Ver materias
-            </button>
-          </div>
-          <div class="hero-stats">
-            <div class="stat">
-              <div class="stat-num">2.4k+</div>
-              <div class="stat-label">Estudiantes activos</div>
-            </div>
-            <div class="stat">
-              <div class="stat-num">180+</div>
-              <div class="stat-label">Ejercicios</div>
-            </div>
-            <div class="stat">
-              <div class="stat-num">95%</div>
-              <div class="stat-label">Lo recomiendan</div>
-            </div>
-          </div>
-        </div>
-        <div class="hero-visual fade-up fade-up-delay-2">
-          <div class="hero-card-stack">
-            <div class="subject-card math">
-              <div class="card-icon">📐</div>
-              <div class="card-title">Matemáticas</div>
-              <div class="card-sub">Álgebra · Geometría · Cálculo</div>
-              <div class="card-bar"><div class="card-bar-fill"></div></div>
-            </div>
-            <div class="subject-card eng">
-              <div class="card-icon">🌍</div>
-              <div class="card-title">English</div>
-              <div class="card-sub">Grammar · Vocabulary · Speaking</div>
-              <div class="card-bar"><div class="card-bar-fill"></div></div>
-            </div>
-            <div class="subject-card esp">
-              <div class="card-icon">📖</div>
-              <div class="card-title">Español</div>
-              <div class="card-sub">Ortografía · Redacción · Literatura</div>
-              <div class="card-bar"><div class="card-bar-fill"></div></div>
-            </div>
-          </div>
-        </div>
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">✦ Gratis para todos</div>
+      <h1>Aprende sin límites,<br><em>crece sin fronteras</em></h1>
+      <p>Lecciones cortas, ejercicios prácticos y asesores reales. Diseñado para estudiantes de México.</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary btn-lg" onclick="showPage('dashboard')">Empezar ahora ✦</button>
+        <button class="btn btn-secondary btn-lg" onclick="showPage('asesores')">Ver asesores</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-item"><div class="num">12 k+</div><div class="lbl">Estudiantes</div></div>
+        <div class="stat-item"><div class="num">3</div><div class="lbl">Materias</div></div>
+        <div class="stat-item"><div class="num">100%</div><div class="lbl">Gratuito</div></div>
+        <div class="stat-item"><div class="num">48 h</div><div class="lbl">Resp. de asesor</div></div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Subjects -->
   <section class="section" id="subjects-section">
     <div class="container">
       <div class="section-tag">Materias</div>
-      <h2 class="section-title">Elige tu camino</h2>
-      <p class="section-sub">Selecciona una o varias materias. Aprende con ejercicios, mini-lecciones y el apoyo de asesores voluntarios.</p>
-
+      <h2 class="section-title">¿En qué quieres mejorar hoy?</h2>
+      <p class="section-sub">Elige tu materia y empieza con una lección de 10 minutos.</p>
       <div class="subjects-grid">
-        <!-- Math -->
-        <div class="subject-tile math" onclick="selectSubject('math')">
-          <div class="tile-icon">📐</div>
-          <div class="tile-name">Matemáticas</div>
-          <div class="tile-desc">Desde fracciones básicas hasta álgebra y geometría analítica. Ejercicios paso a paso con explicaciones visuales.</div>
-          <div class="tile-topics">
-            <span class="topic-tag">Aritmética</span>
-            <span class="topic-tag">Álgebra</span>
-            <span class="topic-tag">Geometría</span>
-            <span class="topic-tag">Estadística</span>
-            <span class="topic-tag">Cálculo</span>
-          </div>
+        <div class="subject-card math" onclick="goToSubject('math')">
+          <span class="subject-icon">📐</span>
+          <h3 style="color:var(--blue)">Matemáticas</h3>
+          <p>Fracciones, álgebra, geometría, estadística y más.</p>
         </div>
-        <!-- English -->
-        <div class="subject-tile eng" onclick="selectSubject('eng')">
-          <div class="tile-icon">🌍</div>
-          <div class="tile-name">English</div>
-          <div class="tile-desc">Build your vocabulary, master grammar rules and boost your reading comprehension. From A1 to B2 level.</div>
-          <div class="tile-topics">
-            <span class="topic-tag">Grammar</span>
-            <span class="topic-tag">Vocabulary</span>
-            <span class="topic-tag">Reading</span>
-            <span class="topic-tag">Listening</span>
-            <span class="topic-tag">Writing</span>
-          </div>
+        <div class="subject-card eng" onclick="goToSubject('eng')">
+          <span class="subject-icon">🌍</span>
+          <h3 style="color:var(--green)">English</h3>
+          <p>Tiempos verbales, vocabulario y comprensión lectora.</p>
         </div>
-        <!-- Español -->
-        <div class="subject-tile esp" onclick="selectSubject('esp')">
-          <div class="tile-icon">📖</div>
-          <div class="tile-name">Español</div>
-          <div class="tile-desc">Ortografía, gramática, comprensión lectora y redacción. Refuerza lo que ves en clases y ve más allá.</div>
-          <div class="tile-topics">
-            <span class="topic-tag">Ortografía</span>
-            <span class="topic-tag">Gramática</span>
-            <span class="topic-tag">Redacción</span>
-            <span class="topic-tag">Literatura</span>
-          </div>
+        <div class="subject-card esp" onclick="goToSubject('esp')">
+          <span class="subject-icon">📖</span>
+          <h3 style="color:var(--purple)">Español</h3>
+          <p>Ortografía, acentuación, redacción y comprensión.</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- How it works -->
-  <section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-    <div class="container">
-      <div class="section-tag">¿Cómo funciona?</div>
-      <h2 class="section-title">Simple. Efectivo. Divertido.</h2>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-num">01</div>
-          <div class="step-icon">🎯</div>
-          <div class="step-title">Diagnóstico inicial</div>
-          <div class="step-desc">Al registrarte, haces una prueba corta para que el sistema conozca tu nivel y diseñe tu ruta de aprendizaje.</div>
-        </div>
-        <div class="step-card">
-          <div class="step-num">02</div>
-          <div class="step-icon">⚡</div>
-          <div class="step-title">Ejercicios dinámicos</div>
-          <div class="step-desc">Practica con ejercicios interactivos de opción múltiple y respuesta abierta. Gana XP con cada acierto.</div>
-        </div>
-        <div class="step-card">
-          <div class="step-num">03</div>
-          <div class="step-icon">📈</div>
-          <div class="step-title">Sube de nivel</div>
-          <div class="step-desc">Acumula XP para desbloquear nuevos temas, logros y tu posición en el ranking de tu escuela o región.</div>
-        </div>
-        <div class="step-card">
-          <div class="step-num">04</div>
-          <div class="step-icon">👩‍🏫</div>
-          <div class="step-title">Conéctate con asesores</div>
-          <div class="step-desc">¿Tienes dudas? Solicita una sesión con un asesor de servicio social o voluntario. Ellos hacen seguimiento de tu avance.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA final -->
-  <section class="section" style="text-align:center;">
-    <div class="container">
-      <div style="font-size:3rem;margin-bottom:1rem;">🚀</div>
-      <h2 class="section-title">¿Listo para subir al <span style="color:var(--cyan)">Zénit</span>?</h2>
-      <p class="section-sub" style="margin: 0 auto 2rem;">Únete gratis hoy. Sin anuncios, sin trampa. Solo aprendizaje.</p>
-      <button class="btn btn-primary btn-lg" onclick="openModal('register')">Crear mi cuenta</button>
     </div>
   </section>
 
   <footer class="footer">
-    <div class="container">
-      <p>Hecho con ❤️ para estudiantes de México · <strong>Zénit</strong> 2025 · <a href="asesores.html" style="color:var(--cyan)">Soy asesor</a></p>
-    </div>
+    Hecho con ❤️ para estudiantes de México · <strong>Edutodos</strong> 2025
   </footer>
 </div>
 
-<!-- ── DASHBOARD ── -->
+<!-- ───────────── DASHBOARD ───────────── -->
 <div class="page" id="page-dashboard">
-  <div class="container">
-    <div class="dashboard-grid">
+<div class="dash-layout">
 
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="user-profile">
-          <div class="avatar" id="dashAvatar">A</div>
-          <div class="user-name" id="dashName">Alumno</div>
-          <div class="user-level">⭐ Nivel <span id="dashLevel">4</span> — Explorador</div>
-          <div class="xp-bar-wrap">
-            <div class="xp-label">
-              <span>XP: <span id="dashXP">1240</span></span>
-              <span>1500 para nivel 5</span>
-            </div>
-            <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:82%"></div></div>
-          </div>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-avatar">P</div>
+    <div class="sidebar-name">Pepito</div>
+    <div class="sidebar-sub">Nivel 4 · Estudiante</div>
+    <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    <div class="xp-label"><span id="dashXP">0</span> / 1500 XP</div>
+    <hr class="sidebar-divider">
+    <button class="sidebar-link active" onclick="showDashSection('overview', this)">
+      <span class="icon">🏠</span> Inicio
+    </button>
+    <button class="sidebar-link" onclick="showDashSection('math', this)">
+      <span class="icon">📐</span> Matemáticas
+    </button>
+    <button class="sidebar-link" onclick="showDashSection('eng', this)">
+      <span class="icon">🌍</span> English
+    </button>
+    <button class="sidebar-link" onclick="showDashSection('esp', this)">
+      <span class="icon">📖</span> Español
+    </button>
+    <hr class="sidebar-divider">
+    <button class="sidebar-link" onclick="showDashSection('achievements', this)">
+      <span class="icon">🏅</span> Logros
+    </button>
+    <button class="sidebar-link" onclick="showPage('ranking')">
+      <span class="icon">🏆</span> Ranking
+    </button>
+  </aside>
+
+  <!-- Main -->
+  <main>
+    <!-- OVERVIEW -->
+    <div id="dash-overview">
+      <div class="dash-greeting">¡Buenas, Pepito! 👋</div>
+      <p style="color:var(--text3);font-weight:600;margin-bottom:1.25rem;">Llevas <strong style="color:var(--orange)">7 días</strong> seguidos estudiando. ¡Sigue así!</p>
+      <div class="dash-streak-bar">
+        🔥 Racha actual: 7 días · Meta: 14 días
+        <div style="margin-left:auto;background:var(--amber-m);border-radius:20px;height:8px;width:120px;overflow:hidden;">
+          <div style="height:100%;width:50%;background:var(--amber);border-radius:20px;"></div>
         </div>
-
-        <nav class="sidebar-nav">
-          <button class="sidebar-link active" onclick="showDashSection('overview')">
-            <span class="icon">🏠</span> Inicio
-          </button>
-          <button class="sidebar-link" onclick="showDashSection('lessons-math')">
-            <span class="icon">📐</span> Matemáticas
-          </button>
-          <button class="sidebar-link" onclick="showDashSection('lessons-eng')">
-            <span class="icon">🌍</span> English
-          </button>
-          <button class="sidebar-link" onclick="showDashSection('lessons-esp')">
-            <span class="icon">📖</span> Español
-          </button>
-          <button class="sidebar-link" onclick="showPage('leaderboard')">
-            <span class="icon">🏆</span> Ranking
-          </button>
-          <button class="sidebar-link" onclick="showDashSection('achievements')">
-            <span class="icon">🎖️</span> Logros
-          </button>
-        </nav>
-
-        <div class="streak-badge">
-          <div class="streak-fire">🔥</div>
-          <div class="streak-info">
-            <div class="num" id="streakNum">7</div>
-            <div class="label">días de racha</div>
-          </div>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="sc-num" style="color:var(--orange)" id="totalXP">1,240</div>
+          <div class="sc-lbl">XP Totales</div>
         </div>
-      </aside>
-
-      <!-- Main content -->
-      <main class="dash-main">
-
-        <!-- Overview -->
-        <div id="dash-overview">
-          <div class="dash-welcome">
-            <div class="dash-welcome-text">
-              <h2>¡Hola, <span id="dashWelcomeName">Alumno</span>! 👋</h2>
-              <p>Llevas 7 días seguidos estudiando. ¡Sigue así!</p>
-            </div>
-            <div class="welcome-emoji">🌟</div>
-          </div>
-
-          <div class="cards-row">
-            <div class="stat-card cyan">
-              <div class="sc-label">Ejercicios hoy</div>
-              <div class="sc-value">12</div>
-              <div class="sc-sub">Meta: 15 ejercicios</div>
-            </div>
-            <div class="stat-card yellow">
-              <div class="sc-label">XP total</div>
-              <div class="sc-value" id="totalXP">1,240</div>
-              <div class="sc-sub">+85 XP hoy</div>
-            </div>
-            <div class="stat-card pink">
-              <div class="sc-label">Posición</div>
-              <div class="sc-value">#8</div>
-              <div class="sc-sub">En tu escuela</div>
-            </div>
-          </div>
-
-          <div class="progress-section">
-            <div class="ps-header">
-              <span class="ps-title">Progreso por materia</span>
-              <button class="btn btn-secondary btn-sm" onclick="showDashSection('lessons-math')">Ver todo</button>
-            </div>
-            <div class="subject-progress-list">
-              <div class="sp-item">
-                <div class="sp-top">
-                  <span class="sp-name"><span class="sp-dot" style="background:var(--yellow)"></span>Matemáticas</span>
-                  <span class="sp-pct" style="color:var(--yellow)">68%</span>
-                </div>
-                <div class="sp-bar"><div class="sp-bar-fill" style="background:var(--yellow);width:68%"></div></div>
-              </div>
-              <div class="sp-item">
-                <div class="sp-top">
-                  <span class="sp-name"><span class="sp-dot" style="background:var(--cyan)"></span>English</span>
-                  <span class="sp-pct" style="color:var(--cyan)">45%</span>
-                </div>
-                <div class="sp-bar"><div class="sp-bar-fill" style="background:var(--cyan);width:45%"></div></div>
-              </div>
-              <div class="sp-item">
-                <div class="sp-top">
-                  <span class="sp-name"><span class="sp-dot" style="background:var(--pink)"></span>Español</span>
-                  <span class="sp-pct" style="color:var(--pink)">82%</span>
-                </div>
-                <div class="sp-bar"><div class="sp-bar-fill" style="background:var(--pink);width:82%"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-              <span class="ps-title">Lecciones recomendadas</span>
-            </div>
-            <div class="lessons-grid">
-              <div class="lesson-card" onclick="goToExercise('math')">
-                <div class="lc-header">
-                  <div class="lc-badge new">Nuevo</div>
-                  <div class="lc-icon">📐</div>
-                </div>
-                <div class="lc-title">Ecuaciones de 2° grado</div>
-                <div class="lc-desc">Aprende a resolver ecuaciones cuadráticas con la fórmula general.</div>
-                <div class="lc-meta">
-                  <span class="lc-time">⏱ 15 min</span>
-                  <span class="lc-xp">+40 XP</span>
-                </div>
-              </div>
-              <div class="lesson-card" onclick="goToExercise('eng')">
-                <div class="lc-header">
-                  <div class="lc-badge review">Repasar</div>
-                  <div class="lc-icon">🌍</div>
-                </div>
-                <div class="lc-title">Past Simple vs. Present Perfect</div>
-                <div class="lc-desc">Practice using these two tenses correctly in context.</div>
-                <div class="lc-meta">
-                  <span class="lc-time">⏱ 10 min</span>
-                  <span class="lc-xp">+30 XP</span>
-                </div>
-              </div>
-              <div class="lesson-card" onclick="goToExercise('esp')">
-                <div class="lc-header">
-                  <div class="lc-badge done">Completado</div>
-                  <div class="lc-icon">📖</div>
-                </div>
-                <div class="lc-title">Uso de B y V</div>
-                <div class="lc-desc">Reglas ortográficas para no confundir estas dos letras.</div>
-                <div class="lc-meta">
-                  <span class="lc-time">⏱ 8 min</span>
-                  <span class="lc-xp">+20 XP</span>
-                </div>
-              </div>
-              <div class="lesson-card locked">
-                <div class="lc-header">
-                  <div class="lc-badge locked">🔒 Bloqueado</div>
-                  <div class="lc-icon">🧮</div>
-                </div>
-                <div class="lc-title">Funciones trigonométricas</div>
-                <div class="lc-desc">Completa Álgebra avanzada para desbloquear este tema.</div>
-                <div class="lc-meta">
-                  <span class="lc-time">⏱ 20 min</span>
-                  <span class="lc-xp">+60 XP</span>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="stat-card">
+          <div class="sc-num" style="color:var(--blue)">18</div>
+          <div class="sc-lbl">Lecciones hechas</div>
         </div>
-
-        <!-- Lessons per subject -->
-        <div id="dash-lessons-math" style="display:none;">
-          <div style="margin-bottom:1.5rem;">
-            <div class="section-tag" style="color:var(--yellow)">Matemáticas</div>
-            <h2 class="section-title" style="font-size:1.8rem;">Tus lecciones</h2>
-          </div>
-          <div class="lessons-grid" id="mathLessons"></div>
+        <div class="stat-card">
+          <div class="sc-num" style="color:var(--green)">4</div>
+          <div class="sc-lbl">Nivel actual</div>
         </div>
+      </div>
+      <h3 style="font-weight:800;margin-bottom:1rem;">Continúa donde dejaste…</h3>
+      <div class="lessons-grid" id="recentLessons"></div>
+    </div>
 
-        <div id="dash-lessons-eng" style="display:none;">
-          <div style="margin-bottom:1.5rem;">
-            <div class="section-tag" style="color:var(--cyan)">English</div>
-            <h2 class="section-title" style="font-size:1.8rem;">Your lessons</h2>
-          </div>
-          <div class="lessons-grid" id="engLessons"></div>
+    <!-- MATH -->
+    <div id="dash-math" style="display:none;">
+      <div class="back-link" onclick="showDashSection('overview', null)">← Volver</div>
+      <div class="section-tag" style="background:var(--blue-l);color:var(--blue)">📐 Matemáticas</div>
+      <h2 class="section-title" style="font-size:1.4rem;margin-top:.5rem;">Tus lecciones</h2>
+      <div class="lessons-grid" id="mathLessons"></div>
+    </div>
+
+    <!-- ENG -->
+    <div id="dash-eng" style="display:none;">
+      <div class="back-link" onclick="showDashSection('overview', null)">← Volver</div>
+      <div class="section-tag" style="background:var(--green-l);color:var(--green)">🌍 English</div>
+      <h2 class="section-title" style="font-size:1.4rem;margin-top:.5rem;">Your lessons</h2>
+      <div class="lessons-grid" id="engLessons"></div>
+    </div>
+
+    <!-- ESP -->
+    <div id="dash-esp" style="display:none;">
+      <div class="back-link" onclick="showDashSection('overview', null)">← Volver</div>
+      <div class="section-tag" style="background:var(--purple-l);color:var(--purple)">📖 Español</div>
+      <h2 class="section-title" style="font-size:1.4rem;margin-top:.5rem;">Tus lecciones</h2>
+      <div class="lessons-grid" id="espLessons"></div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div id="dash-achievements" style="display:none;">
+      <div class="back-link" onclick="showDashSection('overview', null)">← Volver</div>
+      <h2 class="section-title" style="font-size:1.4rem;">Mis logros 🏅</h2>
+      <div class="achievements-grid" id="achievementsGrid"></div>
+    </div>
+  </main>
+</div>
+</div>
+
+<!-- ───────────── EXERCISES ───────────── -->
+<div class="page" id="page-exercises">
+  <div class="exercise-shell">
+    <div class="exercise-header">
+      <div class="back-link" style="margin:0" onclick="showPage('dashboard')">←</div>
+      <div class="ex-progress-bar">
+        <div class="ex-progress-fill" id="exProgressFill" style="width:0%"></div>
+      </div>
+      <div class="ex-counter" id="exCounter">1 / 5</div>
+    </div>
+    <div id="exerciseArea"></div>
+    <div id="resultsArea" style="display:none;">
+      <div class="exercise-card results-screen">
+        <div class="results-emoji" id="resEmoji">🎉</div>
+        <div class="results-title" id="resTitle">¡Excelente!</div>
+        <div class="results-sub" id="resSub">Completaste la lección</div>
+        <div class="results-score" id="resScore">5<small>/5</small></div>
+        <div class="results-xp" id="resXP">⭐ +50 XP ganados</div>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+          <button class="btn btn-secondary" onclick="showPage('dashboard')">← Volver</button>
+          <button class="btn btn-primary" onclick="restartExercise()">Repetir ↺</button>
         </div>
-
-        <div id="dash-lessons-esp" style="display:none;">
-          <div style="margin-bottom:1.5rem;">
-            <div class="section-tag" style="color:var(--pink)">Español</div>
-            <h2 class="section-title" style="font-size:1.8rem;">Tus lecciones</h2>
-          </div>
-          <div class="lessons-grid" id="espLessons"></div>
-        </div>
-
-        <!-- Achievements -->
-        <div id="dash-achievements" style="display:none;">
-          <div style="margin-bottom:1.5rem;">
-            <div class="section-tag">Logros</div>
-            <h2 class="section-title" style="font-size:1.8rem;">Tus medallas</h2>
-          </div>
-          <div class="achievements-grid" id="achievementsGrid"></div>
-        </div>
-
-      </main>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ── LEADERBOARD ── -->
-<div class="page" id="page-leaderboard">
-  <div class="container section">
-    <div style="text-align:center;margin-bottom:2rem;">
+<!-- ───────────── ASESORES ───────────── -->
+<div class="page" id="page-asesores">
+  <section class="section">
+    <div class="container">
+      <div class="adv-hero">
+        <div class="section-tag" style="justify-content:center">Asesores</div>
+        <h1 class="section-title" style="text-align:center;">Aprende con quien<br>ya pasó por ahí ✦</h1>
+        <p class="section-sub" style="text-align:center;margin:0 auto 2rem;">Estudiantes de servicio social y voluntarios listos para ayudarte y resolver tus dudas.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-lg" onclick="document.getElementById('requestSection').scrollIntoView({behavior:'smooth'})">Solicitar asesor</button>
+          <button class="btn btn-secondary btn-lg" onclick="openModal('advisor')">Quiero ser asesor</button>
+        </div>
+      </div>
+
+      <div class="filter-tabs" id="advFilterTabs">
+        <button class="filter-tab active" onclick="filterAdvisors('all', this)">Todos</button>
+        <button class="filter-tab" onclick="filterAdvisors('math', this)">📐 Matemáticas</button>
+        <button class="filter-tab" onclick="filterAdvisors('eng', this)">🌍 English</button>
+        <button class="filter-tab" onclick="filterAdvisors('esp', this)">📖 Español</button>
+      </div>
+      <div class="advisors-grid" id="advisorsGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" id="requestSection" style="background:var(--bg2);">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <div class="section-tag" style="justify-content:center">Solicitud</div>
+        <h2 class="section-title" style="font-size:1.8rem;">Pide tu asesoría</h2>
+        <p class="section-sub" style="margin:0 auto;">Sin costo. Solo dinos en qué necesitas ayuda.</p>
+      </div>
+      <div class="form-card">
+        <div class="form-group">
+          <label class="form-label">Tu nombre</label>
+          <input class="form-input" type="text" placeholder="Nombre o apodo" id="reqName" value="Pepito" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Correo electrónico</label>
+          <input class="form-input" type="email" placeholder="Para que el asesor te contacte" id="reqEmail" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Materia</label>
+          <select class="form-select" id="reqSubject">
+            <option value="">Selecciona una materia</option>
+            <option value="math">📐 Matemáticas</option>
+            <option value="eng">🌍 English</option>
+            <option value="esp">📖 Español</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tema específico</label>
+          <input class="form-input" type="text" placeholder="Ej: Fracciones, Past simple, Uso de la coma..." id="reqTopic" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">¿Cuándo prefieres tu sesión?</label>
+          <select class="form-select" id="reqTime">
+            <option value="">Selecciona</option>
+            <option>Lunes a Viernes, mañana (8-12h)</option>
+            <option>Lunes a Viernes, tarde (14-18h)</option>
+            <option>Lunes a Viernes, noche (18-21h)</option>
+            <option>Fin de semana, mañana</option>
+            <option>Fin de semana, tarde</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cuéntanos más (opcional)</label>
+          <textarea class="form-textarea" placeholder="¿Qué dificultad tienes? ¿Hay algún examen próximo?" id="reqNotes"></textarea>
+        </div>
+        <button class="btn btn-primary btn-lg" style="width:100%;" onclick="submitRequest()">Enviar solicitud ✉️</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Hecho con ❤️ para estudiantes de México · <strong>Edutodos</strong> 2025
+  </footer>
+</div>
+
+<!-- ───────────── RANKING ───────────── -->
+<div class="page" id="page-ranking">
+  <section class="section">
+    <div class="container" style="max-width:600px;">
       <div class="section-tag" style="justify-content:center">Ranking</div>
-      <h2 class="section-title">¿Quién está en la cima?</h2>
-      <p class="section-sub" style="margin:0 auto;">Los que más estudian, más brillan 🌟</p>
-    </div>
-
-    <div class="leaderboard-wrap">
-      <!-- Podium -->
+      <h2 class="section-title" style="text-align:center;">Top estudiantes 🏆</h2>
       <div class="podium" id="podium"></div>
-
-      <!-- List -->
-      <div class="leaderboard-list" id="leaderboardList"></div>
+      <div id="leaderboardList"></div>
     </div>
-  </div>
+  </section>
 </div>
 
-<!-- ═══════════════ MODALS ═══════════════ -->
-
-<!-- Login -->
-<div class="modal-overlay" id="modal-login">
+<!-- ── ADVISOR MODAL ── -->
+<div class="modal-overlay" id="modal-advisor">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('login')">✕</button>
-    <div class="modal-title">Bienvenido de vuelta 👋</div>
-    <div class="modal-sub">Entra para continuar tu camino</div>
+    <button class="modal-close" onclick="closeModal('advisor')">✕</button>
+    <div class="modal-title">Quiero ser asesor 🎓</div>
+    <div class="modal-sub">Ayuda a otros y acredita horas de servicio social o voluntariado.</div>
     <div class="form-group">
-      <label class="form-label">Correo electrónico</label>
-      <input class="form-input" type="email" placeholder="tu@correo.com" id="loginEmail" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Contraseña</label>
-      <input class="form-input" type="password" placeholder="••••••••" id="loginPass" />
-    </div>
-    <button class="btn btn-primary" style="width:100%;padding:.85rem;" onclick="doLogin()">Entrar</button>
-    <div class="divider">o</div>
-    <p style="text-align:center;font-size:.85rem;color:var(--text-muted);">¿No tienes cuenta? <a href="#" style="color:var(--cyan)" onclick="closeModal('login');openModal('register')">Regístrate gratis</a></p>
-  </div>
-</div>
-
-<!-- Register -->
-<div class="modal-overlay" id="modal-register">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('register')">✕</button>
-    <div class="modal-title">Crea tu cuenta ⚡</div>
-    <div class="modal-sub">Gratis, sin anuncios y para siempre</div>
-    <div class="form-group">
-      <label class="form-label">¿Cómo te llamas?</label>
-      <input class="form-input" type="text" placeholder="Tu nombre o apodo" id="regName" />
+      <label class="form-label">Nombre completo</label>
+      <input class="form-input" type="text" placeholder="Tu nombre" id="advName" />
     </div>
     <div class="form-group">
       <label class="form-label">Correo electrónico</label>
-      <input class="form-input" type="email" placeholder="tu@correo.com" id="regEmail" />
+      <input class="form-input" type="email" placeholder="correo@universidad.edu" id="advEmail" />
     </div>
     <div class="form-group">
-      <label class="form-label">Contraseña</label>
-      <input class="form-input" type="password" placeholder="Mínimo 6 caracteres" id="regPass" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Año escolar</label>
-      <select class="form-select" id="regYear">
-        <option value="">Selecciona</option>
-        <option>1° Secundaria</option>
-        <option>2° Secundaria</option>
-        <option>3° Secundaria</option>
-        <option>1° Preparatoria</option>
-        <option>2° Preparatoria</option>
-        <option>3° Preparatoria</option>
+      <label class="form-label">Tipo de participación</label>
+      <select class="form-select" id="advType">
+        <option>Servicio social universitario</option>
+        <option>Voluntariado</option>
+        <option>Práctica profesional</option>
       </select>
     </div>
-    <button class="btn btn-primary" style="width:100%;padding:.85rem;" onclick="doRegister()">¡Crear cuenta!</button>
-    <p style="text-align:center;font-size:.78rem;color:var(--text-dim);margin-top:1rem;">Al registrarte aceptas nuestros términos de uso.</p>
+    <div class="form-group">
+      <label class="form-label">Materias que puedes asesorar</label>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.5rem;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer;font-weight:700;">
+          <input type="checkbox" id="adv-math" style="accent-color:var(--blue)"> 📐 Matemáticas
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer;font-weight:700;">
+          <input type="checkbox" id="adv-eng" style="accent-color:var(--green)"> 🌍 English
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer;font-weight:700;">
+          <input type="checkbox" id="adv-esp" style="accent-color:var(--purple)"> 📖 Español
+        </label>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-lg" style="width:100%;" onclick="submitAdvisor()">Enviar solicitud</button>
   </div>
 </div>
 
-<!-- Toast -->
+<!-- ── TOAST ── -->
 <div class="toast" id="toast">
   <div class="toast-icon" id="toastIcon">✅</div>
-  <div class="toast-text">
-    <div class="title" id="toastTitle">¡Genial!</div>
-    <div class="sub" id="toastSub">Acción completada</div>
+  <div>
+    <div class="toast-title" id="toastTitle"></div>
+    <div class="toast-sub" id="toastSub"></div>
   </div>
 </div>
 
-<script src="app.js"></script>
+<script>
+/* ─── STATE ─── */
+let xpPoints = 1240;
+let currentSubject = 'math';
+let currentQuestion = 0;
+let score = 0;
+let exerciseQuestions = [];
+
+/* ─── DATA ─── */
+const LESSONS = {
+  math: [
+    { title:'Fracciones básicas',       desc:'Suma, resta, mult y división.',         icon:'🍕', badge:'done',   time:'10 min', xp:25 },
+    { title:'Álgebra básica',            desc:'Variables y ecuaciones simples.',       icon:'🔢', badge:'done',   time:'12 min', xp:30 },
+    { title:'Ecuaciones de 2° grado',    desc:'Fórmula general y factorización.',     icon:'📐', badge:'new',    time:'15 min', xp:40 },
+    { title:'Geometría: perímetro',      desc:'Figuras planas.',                      icon:'📏', badge:'review', time:'10 min', xp:25 },
+    { title:'Estadística básica',        desc:'Media, mediana, moda.',                icon:'📊', badge:'new',    time:'14 min', xp:35 },
+    { title:'Trigonometría',             desc:'Seno, coseno, tangente.',              icon:'🧮', badge:'locked', time:'20 min', xp:60 },
+  ],
+  eng: [
+    { title:'Simple Present',           desc:'Habits and general truths.',            icon:'🗓️', badge:'done',   time:'10 min', xp:20 },
+    { title:'Past Simple',              desc:'Completed actions in the past.',        icon:'⏮️', badge:'review', time:'12 min', xp:30 },
+    { title:'Past vs. Present Perfect', desc:'Key difference between tenses.',       icon:'🌍', badge:'new',    time:'12 min', xp:35 },
+    { title:'Vocabulary: Daily Life',   desc:'50 essential everyday words.',         icon:'📚', badge:'new',    time:'8 min',  xp:25 },
+    { title:'Reading Comprehension',    desc:'Understand texts and answer.',         icon:'📖', badge:'locked', time:'18 min', xp:45 },
+    { title:'Writing: Paragraphs',      desc:'Structure well-formed paragraphs.',    icon:'✍️', badge:'locked', time:'20 min', xp:50 },
+  ],
+  esp: [
+    { title:'Uso de B y V',             desc:'Reglas para no confundirlas.',          icon:'📝', badge:'done',   time:'8 min',  xp:20 },
+    { title:'Uso de la coma',           desc:'Cuándo colocar comas.',                icon:'✏️', badge:'done',   time:'10 min', xp:25 },
+    { title:'Acentuación',             desc:'Reglas general y diacrítica.',          icon:'á',  badge:'review', time:'12 min', xp:30 },
+    { title:'Tipos de texto',           desc:'Narrativo, descriptivo, argumentativo.',icon:'📄', badge:'new',    time:'14 min', xp:35 },
+    { title:'Comprensión lectora',      desc:'Ideas principales y secundarias.',     icon:'🔍', badge:'new',    time:'16 min', xp:40 },
+    { title:'Redacción avanzada',       desc:'Textos claros y estructurados.',        icon:'🖊️', badge:'locked', time:'22 min', xp:60 },
+  ]
+};
+
+const QUESTIONS = {
+  math: [
+    { q:'¿Cuánto es ½ + ¾?', type:'mc', options:['1/4','5/4','1','3/8'], answer:1, exp:'½ + ¾ = 2/4 + 3/4 = 5/4' },
+    { q:'Simplifica: 12/16', type:'mc', options:['2/3','3/4','4/5','1/2'], answer:1, exp:'12/16 ÷ 4/4 = 3/4' },
+    { q:'¿Cuánto es 3x = 12? Escribe el valor de x.', type:'fill', answer:'4', exp:'x = 12 ÷ 3 = 4' },
+    { q:'¿Cuál es el perímetro de un cuadrado con lado 7 cm?', type:'mc', options:['14 cm','28 cm','49 cm','21 cm'], answer:1, exp:'Perímetro = 4 × 7 = 28 cm' },
+    { q:'La media de 4, 6, 8, 10 es:', type:'mc', options:['6','7','8','9'], answer:1, exp:'(4+6+8+10)/4 = 28/4 = 7' },
+  ],
+  eng: [
+    { q:'Choose the correct form: She ___ to school every day.', type:'mc', options:['go','goes','going','went'], answer:1, exp:'"She" (3rd person singular) needs "goes"' },
+    { q:'Yesterday, I ___ a great movie.', type:'mc', options:['watch','watches','watched','watching'], answer:2, exp:'"Yesterday" signals past simple → watched' },
+    { q:'What is the past simple of "go"?', type:'fill', answer:'went', exp:'go → went (irregular verb)' },
+    { q:'What does "exhausted" mean?', type:'mc', options:['happy','very tired','confused','excited'], answer:1, exp:'"Exhausted" means extremely tired.' },
+    { q:'The sun ___ in the east. (Simple Present)', type:'mc', options:['rise','rises','rose','is rise'], answer:1, exp:'General truth → rises (3rd person)' },
+  ],
+  esp: [
+    { q:'¿Cuál de estas palabras se escribe con V?', type:'mc', options:['baca','vaca','baka','waca'], answer:1, exp:'"Vaca" (animal) siempre se escribe con V' },
+    { q:'¿Cuándo se usa coma? "Juan ___ Pedro y Ana llegaron."', type:'mc', options:['no lleva coma','lleva coma después de Juan','lleva coma antes de Pedro','lleva coma al final'], answer:0, exp:'Con "y" enumerando 3 o más sí, pero aquí solo hay 2 sujetos con "y" → sin coma' },
+    { q:'Escribe el acento de la palabra: cafe', type:'fill', answer:'café', exp:'Palabra aguda terminada en vocal → lleva acento: café' },
+    { q:'¿Cuál es un texto narrativo?', type:'mc', options:['Un artículo científico','Un cuento','Una receta','Un ensayo'], answer:1, exp:'El cuento es texto narrativo porque narra eventos.' },
+    { q:'La idea principal de un texto es:', type:'mc', options:['El título','El autor','El tema central del texto','La conclusión'], answer:2, exp:'La idea principal = el tema o argumento central.' },
+  ]
+};
+
+const ADVISORS = [
+  { name:'Valentina R.', role:'Servicio social · UANL', tags:['math','eng'], rating:4.9, sessions:48, color:'#E91E63' },
+  { name:'Diego M.',      role:'Voluntario · TEC',       tags:['math'],       rating:4.8, sessions:35, color:'#1565C0' },
+  { name:'Sofía L.',      role:'Servicio social · UDEM', tags:['esp','eng'],  rating:4.9, sessions:62, color:'#7B1FA2' },
+  { name:'Andrés T.',     role:'Voluntario · UAM',       tags:['math','esp'], rating:4.7, sessions:29, color:'#2E7D32' },
+  { name:'Mariana C.',    role:'Práctica prof. · ITESO', tags:['eng'],        rating:5.0, sessions:18, color:'#00838F' },
+  { name:'Luis P.',       role:'Voluntario · IPN',       tags:['math'],       rating:4.6, sessions:41, color:'#E65100' },
+];
+
+const LEADERBOARD = [
+  { name:'Valentina R.', xp:3450, color:'#E91E63' },
+  { name:'Diego M.',     xp:2980, color:'#1565C0' },
+  { name:'Sofía L.',     xp:2750, color:'#7B1FA2' },
+  { name:'Andrés T.',    xp:2100, color:'#2E7D32' },
+  { name:'Mariana C.',   xp:1850, color:'#00838F' },
+  { name:'Pepito',       xp:1240, color:'#FF7043', isMe:true },
+  { name:'Luis P.',      xp:1680, color:'#E65100' },
+  { name:'Camila N.',    xp:1450, color:'#C2185B' },
+  { name:'Rodrigo H.',   xp:900,  color:'#1976D2' },
+  { name:'Fernanda Q.',  xp:720,  color:'#5D4037' },
+];
+
+const ACHIEVEMENTS = [
+  { icon:'🔥', name:'Racha de 7 días',    desc:'7 días estudiando seguidos',    unlocked:true  },
+  { icon:'⚡', name:'Primera lección',     desc:'Completaste tu 1ª lección',     unlocked:true  },
+  { icon:'🏆', name:'Top 10',             desc:'Entra al top 10 del ranking',   unlocked:true  },
+  { icon:'💯', name:'Perfección',          desc:'10 respuestas seguidas ok',     unlocked:true  },
+  { icon:'🧠', name:'Polímata',            desc:'Progreso en las 3 materias',    unlocked:false },
+  { icon:'🚀', name:'Despegue',            desc:'Llega al nivel 5',              unlocked:false },
+  { icon:'📚', name:'Maratón lector',      desc:'50 ejercicios de Español',      unlocked:false },
+  { icon:'🌍', name:'Global citizen',      desc:'30 ejercicios en inglés',       unlocked:false },
+];
+
+/* ─── NAVIGATION ─── */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const p = document.getElementById('page-' + id);
+  if (p) { p.classList.add('active'); window.scrollTo({ top:0, behavior:'smooth' }); }
+
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const map = { home:'nav-home', dashboard:'nav-dash', asesores:'nav-adv', ranking:'nav-rank' };
+  const el = document.getElementById(map[id]);
+  if (el) el.classList.add('active');
+
+  if (id === 'dashboard')  renderDashboard();
+  if (id === 'ranking')    renderLeaderboard();
+  if (id === 'asesores')   renderAdvisors('all');
+}
+
+function goToSubject(sub) {
+  showPage('dashboard');
+  setTimeout(() => showDashSection(sub, null), 100);
+}
+
+/* ─── DASHBOARD ─── */
+function renderDashboard() {
+  const pct = Math.min((xpPoints / 1500) * 100, 100);
+  document.getElementById('xpFill').style.width = pct + '%';
+  document.getElementById('dashXP').textContent = xpPoints.toLocaleString();
+  document.getElementById('totalXP').textContent = xpPoints.toLocaleString();
+
+  const recent = [LESSONS.math[2], LESSONS.eng[1], LESSONS.esp[2]];
+  document.getElementById('recentLessons').innerHTML = recent.map((l, i) => {
+    const subs = ['math','eng','esp'];
+    return lessonCardHTML(l, subs[i]);
+  }).join('');
+}
+
+function showDashSection(section, clickedBtn) {
+  ['overview','math','eng','esp','achievements'].forEach(s => {
+    const el = document.getElementById('dash-' + s);
+    if (el) el.style.display = 'none';
+  });
+  const t = document.getElementById('dash-' + section);
+  if (t) t.style.display = 'block';
+
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  if (clickedBtn) clickedBtn.classList.add('active');
+
+  if (section === 'math')         renderLessons('math', 'mathLessons');
+  if (section === 'eng')          renderLessons('eng', 'engLessons');
+  if (section === 'esp')          renderLessons('esp', 'espLessons');
+  if (section === 'achievements') renderAchievements();
+}
+
+function badgeLabel(b) {
+  return { done:'✅ Completado', new:'⚡ Nuevo', review:'🔄 Repasar', locked:'🔒 Bloqueado' }[b] || b;
+}
+
+function lessonCardHTML(l, subject) {
+  const locked = l.badge === 'locked';
+  return `<div class="lesson-card ${locked ? 'locked' : ''}" ${!locked ? `onclick="startExercise('${subject}')"` : ''}>
+    <div class="lc-header">
+      <span class="lc-badge ${l.badge}">${badgeLabel(l.badge)}</span>
+      <span class="lc-icon">${l.icon}</span>
+    </div>
+    <div class="lc-title">${l.title}</div>
+    <div class="lc-desc">${l.desc}</div>
+    <div class="lc-meta">
+      <span class="lc-time">⏱ ${l.time}</span>
+      <span class="lc-xp">+${l.xp} XP</span>
+    </div>
+  </div>`;
+}
+
+function renderLessons(subject, containerId) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = LESSONS[subject].map(l => lessonCardHTML(l, subject)).join('');
+}
+
+function renderAchievements() {
+  const g = document.getElementById('achievementsGrid');
+  if (!g) return;
+  g.innerHTML = ACHIEVEMENTS.map(a => `
+    <div class="ach-card ${a.unlocked ? '' : 'locked'}">
+      <div class="ach-icon">${a.icon}</div>
+      <div class="ach-name">${a.name}</div>
+      <div class="ach-desc">${a.desc}</div>
+    </div>
+  `).join('');
+}
+
+/* ─── EXERCISES ─── */
+function startExercise(subject) {
+  currentSubject = subject;
+  currentQuestion = 0;
+  score = 0;
+  exerciseQuestions = QUESTIONS[subject];
+  showPage('exercises');
+  document.getElementById('resultsArea').style.display = 'none';
+  document.getElementById('exerciseArea').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const total = exerciseQuestions.length;
+  const q = exerciseQuestions[currentQuestion];
+  const pct = (currentQuestion / total) * 100;
+  document.getElementById('exProgressFill').style.width = pct + '%';
+  document.getElementById('exCounter').textContent = `${currentQuestion + 1} / ${total}`;
+
+  let optionsHTML = '';
+  if (q.type === 'mc') {
+    optionsHTML = `<div class="ex-options">${q.options.map((o, i) =>
+      `<button class="ex-option" onclick="checkMC(this, ${i}, ${q.answer})">${o}</button>`
+    ).join('')}</div>`;
+  } else {
+    optionsHTML = `<input class="ex-fill-input" id="fillInput" type="text" placeholder="Escribe tu respuesta..." />
+    <button class="btn btn-primary btn-lg ex-next-btn" onclick="checkFill('${q.answer}')">Comprobar →</button>`;
+  }
+
+  document.getElementById('exerciseArea').innerHTML = `
+    <div class="exercise-card">
+      <div class="ex-q-num">Pregunta ${currentQuestion + 1}</div>
+      <div class="ex-question">${q.q}</div>
+      ${optionsHTML}
+      <div id="exFeedback" style="display:none;" class="ex-feedback"></div>
+    </div>
+  `;
+}
+
+function checkMC(btn, selected, correct) {
+  document.querySelectorAll('.ex-option').forEach(b => b.disabled = true);
+  const q = exerciseQuestions[currentQuestion];
+  const allBtns = document.querySelectorAll('.ex-option');
+  allBtns[correct].classList.add('correct');
+  if (selected !== correct) {
+    btn.classList.add('wrong');
+    showFeedback(false, q.exp);
+  } else {
+    score++;
+    showFeedback(true, q.exp);
+  }
+  setTimeout(nextQuestion, 1800);
+}
+
+function checkFill(correct) {
+  const val = (document.getElementById('fillInput')?.value || '').trim().toLowerCase();
+  const q = exerciseQuestions[currentQuestion];
+  const ok = val === correct.toLowerCase();
+  if (ok) score++;
+  showFeedback(ok, q.exp);
+  setTimeout(nextQuestion, 1800);
+}
+
+function showFeedback(ok, exp) {
+  const fb = document.getElementById('exFeedback');
+  if (!fb) return;
+  fb.style.display = 'block';
+  fb.className = 'ex-feedback ' + (ok ? 'ok' : 'err');
+  fb.textContent = (ok ? '✅ ¡Correcto! ' : '❌ Incorrecto. ') + exp;
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= exerciseQuestions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('exerciseArea').style.display = 'none';
+  document.getElementById('resultsArea').style.display = 'block';
+  const total = exerciseQuestions.length;
+  const gained = score * 10;
+  xpPoints += gained;
+  const emoji = score === total ? '🎉' : score >= total / 2 ? '😊' : '💪';
+  document.getElementById('resEmoji').textContent = emoji;
+  document.getElementById('resTitle').textContent = score === total ? '¡Perfecto!' : score >= total / 2 ? '¡Buen trabajo!' : '¡Sigue practicando!';
+  document.getElementById('resSub').textContent = `Completaste la lección`;
+  document.getElementById('resScore').innerHTML = `${score}<small>/${total}</small>`;
+  document.getElementById('resXP').textContent = `⭐ +${gained} XP ganados`;
+  document.getElementById('exProgressFill').style.width = '100%';
+}
+
+function restartExercise() {
+  currentQuestion = 0; score = 0;
+  document.getElementById('resultsArea').style.display = 'none';
+  document.getElementById('exerciseArea').style.display = 'block';
+  renderQuestion();
+}
+
+/* ─── ADVISORS ─── */
+function renderAdvisors(filter) {
+  const g = document.getElementById('advisorsGrid');
+  if (!g) return;
+  const filtered = filter === 'all' ? ADVISORS : ADVISORS.filter(a => a.tags.includes(filter));
+  const tagLabel = { math:'📐 Mat', eng:'🌍 Eng', esp:'📖 Esp' };
+  g.innerHTML = filtered.map(a => `
+    <div class="advisor-card">
+      <div class="adv-avatar" style="background:${a.color}">${a.name.charAt(0)}</div>
+      <div class="adv-name">${a.name}</div>
+      <div class="adv-role">${a.role}</div>
+      <div class="adv-tags">
+        ${a.tags.map(t => `<span class="adv-tag tag-${t}">${tagLabel[t]}</span>`).join('')}
+      </div>
+      <div class="adv-rating">⭐ ${a.rating}</div>
+      <div class="adv-sessions">${a.sessions} sesiones realizadas</div>
+      <button class="btn btn-primary btn-sm" style="margin-top:.75rem;width:100%;" onclick="document.getElementById('requestSection').scrollIntoView({behavior:'smooth'})">Solicitar</button>
+    </div>
+  `).join('');
+}
+
+function filterAdvisors(filter, btn) {
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAdvisors(filter);
+}
+
+function submitRequest() {
+  const name = document.getElementById('reqName').value;
+  const sub  = document.getElementById('reqSubject').value;
+  if (!name || !sub) { showToast('⚠️','Faltan datos','Llena los campos requeridos'); return; }
+  showToast('✅','¡Solicitud enviada!','Un asesor te contactará en menos de 24h');
+  document.getElementById('reqSubject').value = '';
+  document.getElementById('reqTopic').value = '';
+  document.getElementById('reqNotes').value = '';
+}
+
+function submitAdvisor() {
+  const name = document.getElementById('advName').value;
+  if (!name) { showToast('⚠️','Falta tu nombre','Por favor ingrésalo'); return; }
+  closeModal('advisor');
+  showToast('🎉','¡Gracias por unirte!','Nos pondremos en contacto contigo pronto.');
+}
+
+/* ─── LEADERBOARD ─── */
+function renderLeaderboard() {
+  const sorted = [...LEADERBOARD].sort((a, b) => b.xp - a.xp);
+  const top3 = sorted.slice(0, 3);
+  const order = [top3[1], top3[0], top3[2]];
+  const heights = ['100px', '140px', '80px'];
+  const medals = ['🥈','🥇','🥉'];
+  document.getElementById('podium').innerHTML = order.map((p, i) => `
+    <div class="podium-item">
+      <div class="podium-bar" style="height:${heights[i]};background:${p.color};">
+        <div class="podium-avatar" style="background:rgba(0,0,0,.25)">${p.name.charAt(0)}</div>
+        <div class="podium-name">${p.name}</div>
+        <div class="podium-xp">${p.xp.toLocaleString()} XP</div>
+      </div>
+      <div class="podium-rank">${medals[i]}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('leaderboardList').innerHTML = sorted.map((p, i) => `
+    <div class="lb-row ${p.isMe ? 'me' : ''}">
+      <span class="lb-rank">${i + 1}</span>
+      <div class="lb-avatar" style="background:${p.color}">${p.name.charAt(0)}</div>
+      <span class="lb-name">${p.name}${p.isMe ? ' <span style="font-size:.72rem;color:var(--orange)">(tú)</span>' : ''}</span>
+      <span class="lb-xp">${p.xp.toLocaleString()} XP</span>
+    </div>
+  `).join('');
+}
+
+/* ─── MODALS ─── */
+function openModal(id) {
+  const el = document.getElementById('modal-' + id);
+  if (el) el.classList.add('open');
+}
+function closeModal(id) {
+  const el = document.getElementById('modal-' + id);
+  if (el) el.classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+/* ─── TOAST ─── */
+function showToast(icon, title, sub) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastSub').textContent = sub;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+/* ─── INIT ─── */
+document.addEventListener('DOMContentLoaded', () => {
+  showPage('home');
+});
+</script>
 </body>
 </html>
