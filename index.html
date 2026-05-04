@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zénit — Aprende Sin Límites</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="nav">
+  <div class="nav-logo">
+    ZÉN<span>IT</span><div class="dot"></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active" onclick="showPage('home'); return false;">Inicio</a></li>
+    <li><a href="#" onclick="requireLogin('dashboard'); return false;">Mi progreso</a></li>
+    <li><a href="asesores.html">Asesores</a></li>
+    <li><a href="#" onclick="requireLogin('leaderboard'); return false;">Ranking</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn btn-ghost" onclick="openModal('login')">Entrar</button>
+    <button class="btn btn-primary" onclick="openModal('register')">Únete gratis</button>
+  </div>
+  <button class="hamburger" onclick="toggleMobileNav()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#" onclick="showPage('home'); toggleMobileNav(); return false;">🏠 Inicio</a>
+  <a href="#" onclick="requireLogin('dashboard'); toggleMobileNav(); return false;">📊 Mi progreso</a>
+  <a href="asesores.html">👩‍🏫 Asesores</a>
+  <a href="#" onclick="requireLogin('leaderboard'); toggleMobileNav(); return false;">🏆 Ranking</a>
+  <a href="#" onclick="openModal('login'); toggleMobileNav(); return false;" style="color:var(--cyan);">Entrar</a>
+</div>
+
+<!-- ═══════════════ PAGES ═══════════════ -->
+
+<!-- ── HOME ── -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-content fade-up">
+          <div class="hero-tag">Plataforma gratuita para estudiantes</div>
+          <h1 class="hero-title">
+            Aprende más<br>
+            rápido. Sube de<br>
+            <span class="accent-cyan">nivel</span>
+            <span class="accent-yellow"> ✦</span>
+          </h1>
+          <p class="hero-subtitle">
+            Matemáticas, Inglés y Español — adaptados a tu ritmo.
+            Gana XP, sube en el ranking y conecta con asesores que te apoyan de verdad.
+          </p>
+          <div class="hero-cta">
+            <button class="btn btn-primary btn-lg" onclick="openModal('register')">
+              ⚡ Empieza ahora — es gratis
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="scrollToSubjects()">
+              Ver materias
+            </button>
+          </div>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-num">2.4k+</div>
+              <div class="stat-label">Estudiantes activos</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">180+</div>
+              <div class="stat-label">Ejercicios</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">95%</div>
+              <div class="stat-label">Lo recomiendan</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual fade-up fade-up-delay-2">
+          <div class="hero-card-stack">
+            <div class="subject-card math">
+              <div class="card-icon">📐</div>
+              <div class="card-title">Matemáticas</div>
+              <div class="card-sub">Álgebra · Geometría · Cálculo</div>
+              <div class="card-bar"><div class="card-bar-fill"></div></div>
+            </div>
+            <div class="subject-card eng">
+              <div class="card-icon">🌍</div>
+              <div class="card-title">English</div>
+              <div class="card-sub">Grammar · Vocabulary · Speaking</div>
+              <div class="card-bar"><div class="card-bar-fill"></div></div>
+            </div>
+            <div class="subject-card esp">
+              <div class="card-icon">📖</div>
+              <div class="card-title">Español</div>
+              <div class="card-sub">Ortografía · Redacción · Literatura</div>
+              <div class="card-bar"><div class="card-bar-fill"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subjects -->
+  <section class="section" id="subjects-section">
+    <div class="container">
+      <div class="section-tag">Materias</div>
+      <h2 class="section-title">Elige tu camino</h2>
+      <p class="section-sub">Selecciona una o varias materias. Aprende con ejercicios, mini-lecciones y el apoyo de asesores voluntarios.</p>
+
+      <div class="subjects-grid">
+        <!-- Math -->
+        <div class="subject-tile math" onclick="selectSubject('math')">
+          <div class="tile-icon">📐</div>
+          <div class="tile-name">Matemáticas</div>
+          <div class="tile-desc">Desde fracciones básicas hasta álgebra y geometría analítica. Ejercicios paso a paso con explicaciones visuales.</div>
+          <div class="tile-topics">
+            <span class="topic-tag">Aritmética</span>
+            <span class="topic-tag">Álgebra</span>
+            <span class="topic-tag">Geometría</span>
+            <span class="topic-tag">Estadística</span>
+            <span class="topic-tag">Cálculo</span>
+          </div>
+        </div>
+        <!-- English -->
+        <div class="subject-tile eng" onclick="selectSubject('eng')">
+          <div class="tile-icon">🌍</div>
+          <div class="tile-name">English</div>
+          <div class="tile-desc">Build your vocabulary, master grammar rules and boost your reading comprehension. From A1 to B2 level.</div>
+          <div class="tile-topics">
+            <span class="topic-tag">Grammar</span>
+            <span class="topic-tag">Vocabulary</span>
+            <span class="topic-tag">Reading</span>
+            <span class="topic-tag">Listening</span>
+            <span class="topic-tag">Writing</span>
+          </div>
+        </div>
+        <!-- Español -->
+        <div class="subject-tile esp" onclick="selectSubject('esp')">
+          <div class="tile-icon">📖</div>
+          <div class="tile-name">Español</div>
+          <div class="tile-desc">Ortografía, gramática, comprensión lectora y redacción. Refuerza lo que ves en clases y ve más allá.</div>
+          <div class="tile-topics">
+            <span class="topic-tag">Ortografía</span>
+            <span class="topic-tag">Gramática</span>
+            <span class="topic-tag">Redacción</span>
+            <span class="topic-tag">Literatura</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div class="section-tag">¿Cómo funciona?</div>
+      <h2 class="section-title">Simple. Efectivo. Divertido.</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-icon">🎯</div>
+          <div class="step-title">Diagnóstico inicial</div>
+          <div class="step-desc">Al registrarte, haces una prueba corta para que el sistema conozca tu nivel y diseñe tu ruta de aprendizaje.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-icon">⚡</div>
+          <div class="step-title">Ejercicios dinámicos</div>
+          <div class="step-desc">Practica con ejercicios interactivos de opción múltiple y respuesta abierta. Gana XP con cada acierto.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-icon">📈</div>
+          <div class="step-title">Sube de nivel</div>
+          <div class="step-desc">Acumula XP para desbloquear nuevos temas, logros y tu posición en el ranking de tu escuela o región.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-icon">👩‍🏫</div>
+          <div class="step-title">Conéctate con asesores</div>
+          <div class="step-desc">¿Tienes dudas? Solicita una sesión con un asesor de servicio social o voluntario. Ellos hacen seguimiento de tu avance.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA final -->
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <div style="font-size:3rem;margin-bottom:1rem;">🚀</div>
+      <h2 class="section-title">¿Listo para subir al <span style="color:var(--cyan)">Zénit</span>?</h2>
+      <p class="section-sub" style="margin: 0 auto 2rem;">Únete gratis hoy. Sin anuncios, sin trampa. Solo aprendizaje.</p>
+      <button class="btn btn-primary btn-lg" onclick="openModal('register')">Crear mi cuenta</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Hecho con ❤️ para estudiantes de México · <strong>Zénit</strong> 2025 · <a href="asesores.html" style="color:var(--cyan)">Soy asesor</a></p>
+    </div>
+  </footer>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div class="page" id="page-dashboard">
+  <div class="container">
+    <div class="dashboard-grid">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="user-profile">
+          <div class="avatar" id="dashAvatar">A</div>
+          <div class="user-name" id="dashName">Alumno</div>
+          <div class="user-level">⭐ Nivel <span id="dashLevel">4</span> — Explorador</div>
+          <div class="xp-bar-wrap">
+            <div class="xp-label">
+              <span>XP: <span id="dashXP">1240</span></span>
+              <span>1500 para nivel 5</span>
+            </div>
+            <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:82%"></div></div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <button class="sidebar-link active" onclick="showDashSection('overview')">
+            <span class="icon">🏠</span> Inicio
+          </button>
+          <button class="sidebar-link" onclick="showDashSection('lessons-math')">
+            <span class="icon">📐</span> Matemáticas
+          </button>
+          <button class="sidebar-link" onclick="showDashSection('lessons-eng')">
+            <span class="icon">🌍</span> English
+          </button>
+          <button class="sidebar-link" onclick="showDashSection('lessons-esp')">
+            <span class="icon">📖</span> Español
+          </button>
+          <button class="sidebar-link" onclick="showPage('leaderboard')">
+            <span class="icon">🏆</span> Ranking
+          </button>
+          <button class="sidebar-link" onclick="showDashSection('achievements')">
+            <span class="icon">🎖️</span> Logros
+          </button>
+        </nav>
+
+        <div class="streak-badge">
+          <div class="streak-fire">🔥</div>
+          <div class="streak-info">
+            <div class="num" id="streakNum">7</div>
+            <div class="label">días de racha</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="dash-main">
+
+        <!-- Overview -->
+        <div id="dash-overview">
+          <div class="dash-welcome">
+            <div class="dash-welcome-text">
+              <h2>¡Hola, <span id="dashWelcomeName">Alumno</span>! 👋</h2>
+              <p>Llevas 7 días seguidos estudiando. ¡Sigue así!</p>
+            </div>
+            <div class="welcome-emoji">🌟</div>
+          </div>
+
+          <div class="cards-row">
+            <div class="stat-card cyan">
+              <div class="sc-label">Ejercicios hoy</div>
+              <div class="sc-value">12</div>
+              <div class="sc-sub">Meta: 15 ejercicios</div>
+            </div>
+            <div class="stat-card yellow">
+              <div class="sc-label">XP total</div>
+              <div class="sc-value" id="totalXP">1,240</div>
+              <div class="sc-sub">+85 XP hoy</div>
+            </div>
+            <div class="stat-card pink">
+              <div class="sc-label">Posición</div>
+              <div class="sc-value">#8</div>
+              <div class="sc-sub">En tu escuela</div>
+            </div>
+          </div>
+
+          <div class="progress-section">
+            <div class="ps-header">
+              <span class="ps-title">Progreso por materia</span>
+              <button class="btn btn-secondary btn-sm" onclick="showDashSection('lessons-math')">Ver todo</button>
+            </div>
+            <div class="subject-progress-list">
+              <div class="sp-item">
+                <div class="sp-top">
+                  <span class="sp-name"><span class="sp-dot" style="background:var(--yellow)"></span>Matemáticas</span>
+                  <span class="sp-pct" style="color:var(--yellow)">68%</span>
+                </div>
+                <div class="sp-bar"><div class="sp-bar-fill" style="background:var(--yellow);width:68%"></div></div>
+              </div>
+              <div class="sp-item">
+                <div class="sp-top">
+                  <span class="sp-name"><span class="sp-dot" style="background:var(--cyan)"></span>English</span>
+                  <span class="sp-pct" style="color:var(--cyan)">45%</span>
+                </div>
+                <div class="sp-bar"><div class="sp-bar-fill" style="background:var(--cyan);width:45%"></div></div>
+              </div>
+              <div class="sp-item">
+                <div class="sp-top">
+                  <span class="sp-name"><span class="sp-dot" style="background:var(--pink)"></span>Español</span>
+                  <span class="sp-pct" style="color:var(--pink)">82%</span>
+                </div>
+                <div class="sp-bar"><div class="sp-bar-fill" style="background:var(--pink);width:82%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+              <span class="ps-title">Lecciones recomendadas</span>
+            </div>
+            <div class="lessons-grid">
+              <div class="lesson-card" onclick="goToExercise('math')">
+                <div class="lc-header">
+                  <div class="lc-badge new">Nuevo</div>
+                  <div class="lc-icon">📐</div>
+                </div>
+                <div class="lc-title">Ecuaciones de 2° grado</div>
+                <div class="lc-desc">Aprende a resolver ecuaciones cuadráticas con la fórmula general.</div>
+                <div class="lc-meta">
+                  <span class="lc-time">⏱ 15 min</span>
+                  <span class="lc-xp">+40 XP</span>
+                </div>
+              </div>
+              <div class="lesson-card" onclick="goToExercise('eng')">
+                <div class="lc-header">
+                  <div class="lc-badge review">Repasar</div>
+                  <div class="lc-icon">🌍</div>
+                </div>
+                <div class="lc-title">Past Simple vs. Present Perfect</div>
+                <div class="lc-desc">Practice using these two tenses correctly in context.</div>
+                <div class="lc-meta">
+                  <span class="lc-time">⏱ 10 min</span>
+                  <span class="lc-xp">+30 XP</span>
+                </div>
+              </div>
+              <div class="lesson-card" onclick="goToExercise('esp')">
+                <div class="lc-header">
+                  <div class="lc-badge done">Completado</div>
+                  <div class="lc-icon">📖</div>
+                </div>
+                <div class="lc-title">Uso de B y V</div>
+                <div class="lc-desc">Reglas ortográficas para no confundir estas dos letras.</div>
+                <div class="lc-meta">
+                  <span class="lc-time">⏱ 8 min</span>
+                  <span class="lc-xp">+20 XP</span>
+                </div>
+              </div>
+              <div class="lesson-card locked">
+                <div class="lc-header">
+                  <div class="lc-badge locked">🔒 Bloqueado</div>
+                  <div class="lc-icon">🧮</div>
+                </div>
+                <div class="lc-title">Funciones trigonométricas</div>
+                <div class="lc-desc">Completa Álgebra avanzada para desbloquear este tema.</div>
+                <div class="lc-meta">
+                  <span class="lc-time">⏱ 20 min</span>
+                  <span class="lc-xp">+60 XP</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lessons per subject -->
+        <div id="dash-lessons-math" style="display:none;">
+          <div style="margin-bottom:1.5rem;">
+            <div class="section-tag" style="color:var(--yellow)">Matemáticas</div>
+            <h2 class="section-title" style="font-size:1.8rem;">Tus lecciones</h2>
+          </div>
+          <div class="lessons-grid" id="mathLessons"></div>
+        </div>
+
+        <div id="dash-lessons-eng" style="display:none;">
+          <div style="margin-bottom:1.5rem;">
+            <div class="section-tag" style="color:var(--cyan)">English</div>
+            <h2 class="section-title" style="font-size:1.8rem;">Your lessons</h2>
+          </div>
+          <div class="lessons-grid" id="engLessons"></div>
+        </div>
+
+        <div id="dash-lessons-esp" style="display:none;">
+          <div style="margin-bottom:1.5rem;">
+            <div class="section-tag" style="color:var(--pink)">Español</div>
+            <h2 class="section-title" style="font-size:1.8rem;">Tus lecciones</h2>
+          </div>
+          <div class="lessons-grid" id="espLessons"></div>
+        </div>
+
+        <!-- Achievements -->
+        <div id="dash-achievements" style="display:none;">
+          <div style="margin-bottom:1.5rem;">
+            <div class="section-tag">Logros</div>
+            <h2 class="section-title" style="font-size:1.8rem;">Tus medallas</h2>
+          </div>
+          <div class="achievements-grid" id="achievementsGrid"></div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ── LEADERBOARD ── -->
+<div class="page" id="page-leaderboard">
+  <div class="container section">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <div class="section-tag" style="justify-content:center">Ranking</div>
+      <h2 class="section-title">¿Quién está en la cima?</h2>
+      <p class="section-sub" style="margin:0 auto;">Los que más estudian, más brillan 🌟</p>
+    </div>
+
+    <div class="leaderboard-wrap">
+      <!-- Podium -->
+      <div class="podium" id="podium"></div>
+
+      <!-- List -->
+      <div class="leaderboard-list" id="leaderboardList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+
+<!-- Login -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">✕</button>
+    <div class="modal-title">Bienvenido de vuelta 👋</div>
+    <div class="modal-sub">Entra para continuar tu camino</div>
+    <div class="form-group">
+      <label class="form-label">Correo electrónico</label>
+      <input class="form-input" type="email" placeholder="tu@correo.com" id="loginEmail" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" type="password" placeholder="••••••••" id="loginPass" />
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:.85rem;" onclick="doLogin()">Entrar</button>
+    <div class="divider">o</div>
+    <p style="text-align:center;font-size:.85rem;color:var(--text-muted);">¿No tienes cuenta? <a href="#" style="color:var(--cyan)" onclick="closeModal('login');openModal('register')">Regístrate gratis</a></p>
+  </div>
+</div>
+
+<!-- Register -->
+<div class="modal-overlay" id="modal-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('register')">✕</button>
+    <div class="modal-title">Crea tu cuenta ⚡</div>
+    <div class="modal-sub">Gratis, sin anuncios y para siempre</div>
+    <div class="form-group">
+      <label class="form-label">¿Cómo te llamas?</label>
+      <input class="form-input" type="text" placeholder="Tu nombre o apodo" id="regName" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Correo electrónico</label>
+      <input class="form-input" type="email" placeholder="tu@correo.com" id="regEmail" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" type="password" placeholder="Mínimo 6 caracteres" id="regPass" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Año escolar</label>
+      <select class="form-select" id="regYear">
+        <option value="">Selecciona</option>
+        <option>1° Secundaria</option>
+        <option>2° Secundaria</option>
+        <option>3° Secundaria</option>
+        <option>1° Preparatoria</option>
+        <option>2° Preparatoria</option>
+        <option>3° Preparatoria</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:.85rem;" onclick="doRegister()">¡Crear cuenta!</button>
+    <p style="text-align:center;font-size:.78rem;color:var(--text-dim);margin-top:1rem;">Al registrarte aceptas nuestros términos de uso.</p>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toastIcon">✅</div>
+  <div class="toast-text">
+    <div class="title" id="toastTitle">¡Genial!</div>
+    <div class="sub" id="toastSub">Acción completada</div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
